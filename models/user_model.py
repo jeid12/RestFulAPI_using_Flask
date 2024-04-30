@@ -22,7 +22,16 @@ class user_model():
             return "no data found"
 
     
-    def  user_addone_model(self,data):
-        self.cur.execute(f"INSERT INTO users( name, email, phone, role, password) VALUES({data['name']}', '{data['email']}', '{data['phone']}', '{data['role']}', '{data['password']}')") 
-        
-        return make_response({"message":"CREATED_SUCCESSFULLY"},201)     
+    def user_addone_model(self, data):
+        try:
+            # Use parameterized query to avoid SQL injection
+            query = "INSERT INTO users(id, name, email, phone, role, password) VALUES(%s, %s, %s, %s, %s, %s)"
+            values = (5, data['name'], data['email'], data['phone'], data['role'], data['password'])
+            self.cur.execute(query, values)
+            self.conn.commit()  # Commit the transaction
+            return make_response({"message": "CREATED_SUCCESSFULLY"}, 201)
+        except Exception as e:
+            # Log the error for debugging
+            print(f"Error: {e}")
+            # Return an error response
+            return make_response({"message": "Error occurred while adding user"}, 500)
