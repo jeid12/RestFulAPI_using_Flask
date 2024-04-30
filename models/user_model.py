@@ -25,8 +25,8 @@ class user_model():
     def user_addone_model(self, data):
         try:
             # Use parameterized query to avoid SQL injection
-            query = "INSERT INTO users(id, name, email, phone, role, password) VALUES(%s, %s, %s, %s, %s, %s)"
-            values = (5, data['name'], data['email'], data['phone'], data['role'], data['password'])
+            query = "INSERT INTO users(name, email, phone, role, password) VALUES(%s, %s, %s, %s, %s, %s)"
+            values = (data['name'], data['email'], data['phone'], data['role'], data['password'])
             self.cur.execute(query, values)
             self.conn.commit()  # Commit the transaction
             return make_response({"message": "CREATED_SUCCESSFULLY"}, 201)
